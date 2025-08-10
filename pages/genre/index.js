@@ -55,14 +55,14 @@ const Genre = () => {
         newGenreName,
         newPage,
       );
-      Router.replace({
-        pathname: LINKS.GENRE.HREF,
-        query: {
-          [QUERY_PARAMS.ID]: newGenreId,
-          [QUERY_PARAMS.NAME]: newGenreName,
-          [QUERY_PARAMS.PAGE]: newPage,
-        },
-      });
+      // Router.replace({
+      //   pathname: LINKS.GENRE.HREF,
+      //   query: {
+      //     [QUERY_PARAMS.ID]: newGenreId,
+      //     [QUERY_PARAMS.NAME]: newGenreName,
+      //     [QUERY_PARAMS.PAGE]: newPage,
+      //   },
+      // });
     }
   }, [dispatch, query]);
 

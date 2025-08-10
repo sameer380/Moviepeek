@@ -5,28 +5,27 @@ import Scenery from 'components/Scenery';
 import DetailsPanelWrapper from 'components/DetailsPanelWrapper';
 import PosterTitle from 'components/PosterTitle';
 import RatingInfo from './RatingInfo';
-import LINKS from 'utils/constants/links';
 import CLASS_NAMES from 'utils/constants/class-names';
 import { W342H513 } from 'config/image-sizes';
-import QUERY_PARAMS from 'utils/constants/query-params';
+import { createMovieSlug } from 'utils/helpers/movieSlugs';
 
 const POSTER_LINK_CLASS_NAME = 'poster-link';
 const POSTER_TITLE_CLASS_NAME = 'poster-title-color';
 const RATING_INFO_CLASS_NAME = 'rating-info-color';
 
-const MovieListItem = ({ theme, movie, baseUrl, fetchpriority }) => (
-  <>
-    <LazyLoad height={200} offset={1400}>
-      <PosterLink
-        className={POSTER_LINK_CLASS_NAME}
-        href={{
-          pathname: LINKS.MOVIE.HREF,
-          query: {
-            [QUERY_PARAMS.ID]: movie.id,
-            [QUERY_PARAMS.PAGE]: 1,
-          },
-        }}
-      >
+const MovieListItem = ({ theme, movie, baseUrl, fetchpriority }) => {
+  const movieYear = movie.release_date
+    ? new Date(movie.release_date).getFullYear()
+    : '2024';
+  const movieSlug = createMovieSlug(movie.title, movieYear, movie.id);
+  
+  return (
+    <>
+      <LazyLoad height={200} offset={1400}>
+        <PosterLink
+          className={POSTER_LINK_CLASS_NAME}
+          href={`/movie/${movieSlug}`}
+        >
         <Scenery
           width={W342H513.WIDTH}
           height={W342H513.HEIGHT}
@@ -66,7 +65,8 @@ const MovieListItem = ({ theme, movie, baseUrl, fetchpriority }) => (
         color: var(--palette-warning-light);
       }
     `}</style>
-  </>
-);
+    </>
+  );
+};
 
 export default MovieListItem;

@@ -12,5 +12,7 @@ module.exports = {
     'import/no-commonjs': 'off',  // Allow CommonJS modules
     'indent': 'off',  // Disable indentation rules for styled-jsx
     'quotes': 'off'  // Disable quote rules for styled-jsx
+
+
   },
 };

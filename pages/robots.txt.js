@@ -2,12 +2,14 @@ const Robots = () => {
   return null;
 };
 
-export async function getServerSideProps({ res }) {
+export async function getServerSideProps({ req, res }) {
+  const host = req?.headers?.host || 'localhost:3000';
+  const baseUrl = `https://${host}`;
   const robotsTxt = `User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://movies.zaps.dev/sitemap.xml
+Sitemap: ${baseUrl}/sitemap.xml
 
 # Disallow admin and private areas
 Disallow: /admin/

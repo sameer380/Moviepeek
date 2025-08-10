@@ -1,11 +1,13 @@
 import { TMDB_API_KEY, TMDB_API_BASE_URL, TMDB_API_VERSION } from 'config/tmdb';
+import { generateMovieUrls } from 'utils/helpers/movieSlugs';
 
 const Sitemap = () => {
   return null;
 };
 
-export async function getServerSideProps({ res }) {
-  const baseUrl = 'https://movies.zaps.dev';
+export async function getServerSideProps({ req, res }) {
+  const host = req?.headers?.host || 'localhost:3000';
+  const baseUrl = `https://${host}`;
 
   try {
     // Fetch multiple movie categories for comprehensive coverage
@@ -64,8 +66,8 @@ export async function getServerSideProps({ res }) {
       return scoreB - scoreA;
     });
 
-    // Take top 200 movies for sitemap (avoid too large files)
-    const topMovies = sortedMovies.slice(0, 200);
+    // Take top 1000 movies for sitemap (Vercel-friendly)
+    const topMovies = sortedMovies.slice(0, 1000);
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -89,31 +91,7 @@ export async function getServerSideProps({ res }) {
     <priority>0.6</priority>
   </url>
 
-  <!-- Category Pages -->
-  <url>
-    <loc>${baseUrl}?category=Popular</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}?category=Top Rated</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}?category=Upcoming</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}?category=Now Playing</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <!-- Category Pages removed to avoid advertising parameterized home URLs -->
 
   <!-- Genre Pages -->
   ${genres.genres
@@ -128,31 +106,21 @@ export async function getServerSideProps({ res }) {
     )
     .join('')}
 
-  <!-- Movie Pages with Enhanced URLs -->
+  <!-- Movie Pages with Enhanced SEO URLs -->
   ${topMovies
     .map((movie) => {
       const movieYear = movie.release_date
         ? new Date(movie.release_date).getFullYear()
-        : '';
-      const movieSlug = movie.title
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '');
+        : '2024';
+      
+      // Generate multiple URL variations for better SEO
+      const urlVariations = generateMovieUrls(movie.title, movieYear, movie.id);
 
-      // Create multiple URL variations for better SEO
-      const urls = [
-        `${baseUrl}/watch-${movieSlug}-${movieYear}`,
-        `${baseUrl}/movie/${movie.id}/${movieSlug}-${movieYear}`,
-        `${baseUrl}/download-${movieSlug}-${movieYear}`,
-        `${baseUrl}/stream-${movieSlug}-${movieYear}`,
-      ];
-
-      return urls
+      return urlVariations
         .map(
           (url) => `
   <url>
-    <loc>${url}</loc>
+    <loc>${baseUrl}${url}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -161,6 +129,13 @@ export async function getServerSideProps({ res }) {
         .join('');
     })
     .join('')}
+
+  <!-- Paginated Movie Sitemaps for SEO Movies -->
+  ${Array.from({ length: 5 }, (_, i) => `
+  <sitemap>
+    <loc>${baseUrl}/sitemap-movies-${i + 1}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+  </sitemap>`).join('')}
 
 
 </urlset>`;

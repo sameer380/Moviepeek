@@ -7,6 +7,7 @@ import MyHead from 'components/MyHead';
 import SearchBar from 'containers/SearchBar';
 import DarkModeToggle from 'containers/DarkModeToggle';
 import TheUser from 'containers/TheUser';
+import Footer from 'components/Footer';
 import MainWrapper from './MainWrapper';
 import ContentWrapper from './ContentWrapper';
 import init from 'actions/init';
@@ -37,6 +38,7 @@ const Layout = ({ theme, children }) => {
           <MainWrapper theme={theme}>
             <AppHeader />
             <ContentWrapper theme={theme}>{children}</ContentWrapper>
+            <Footer />
           </MainWrapper>
         </Media>
         <Media greaterThan="sm">
@@ -62,6 +64,7 @@ const Layout = ({ theme, children }) => {
               }
             `}</style>
             <ContentWrapper theme={theme}>{children}</ContentWrapper>
+            <Footer />
           </MainWrapper>
         </Media>
       </MediaContextProvider>

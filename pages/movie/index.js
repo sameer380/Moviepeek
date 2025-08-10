@@ -47,13 +47,13 @@ const Movie = () => {
         newMovieId,
         newPage,
       );
-      Router.replace({
-        pathname: LINKS.MOVIE.HREF,
-        query: {
-          [QUERY_PARAMS.ID]: newMovieId,
-          [QUERY_PARAMS.PAGE]: newPage,
-        },
-      });
+      // Router.replace({
+      //   pathname: LINKS.MOVIE.HREF,
+      //   query: {
+      //     [QUERY_PARAMS.ID]: newMovieId,
+      //     [QUERY_PARAMS.PAGE]: newPage,
+      //   },
+      // });
     }
   }, [dispatch, query]);
 

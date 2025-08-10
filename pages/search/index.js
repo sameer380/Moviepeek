@@ -45,13 +45,13 @@ const Search = () => {
         newSearchTerm,
         newPage,
       );
-      Router.replace({
-        pathname: LINKS.SEARCH.HREF,
-        query: {
-          [QUERY_PARAMS.SEARCH_TERM]: newSearchTerm,
-          [QUERY_PARAMS.PAGE]: newPage,
-        },
-      });
+      // Router.replace({
+      //   pathname: LINKS.SEARCH.HREF,
+      //   query: {
+      //     [QUERY_PARAMS.SEARCH_TERM]: newSearchTerm,
+      //     [QUERY_PARAMS.PAGE]: newPage,
+      //   },
+      // });
     }
   }, [dispatch, query]);
 
