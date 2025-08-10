@@ -8,30 +8,13 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <div className="footer-section">
+        <div className=" ">
           <h3>Movie Downloads & Streaming</h3>
-          <p>Download full movies free HD quality, watch movies online streaming. Download latest movies, Hollywood movies, Bollywood movies, action movies, comedy movies, horror movies, thriller movies, romance movies, sci-fi movies, adventure movies, drama movies, animated movies, family movies, kids movies, adult movies, 18+ movies, R-rated movies, PG-13 movies, G-rated movies, blockbuster movies, box office movies, award winning movies, Oscar movies, Golden Globe movies, Cannes movies, Sundance movies, indie movies, independent movies, foreign movies, international movies, English movies, Hindi movies, Spanish movies, French movies, German movies, Italian movies, Korean movies, Japanese movies, Chinese movies, Russian movies, Arabic movies, Turkish movies, Brazilian movies, Mexican movies, Canadian movies, Australian movies, British movies, European movies, Asian movies, African movies, Latin American movies, Middle Eastern movies, Scandinavian movies, Nordic movies, Baltic movies, Eastern European movies, Western European movies, Southern European movies, Northern European movies, Central European movies, Balkan movies, Mediterranean movies, Caribbean movies, Pacific movies, Atlantic movies, Indian movies, Pakistani movies, Bangladeshi movies, Sri Lankan movies, Nepali movies, Bhutanese movies, Maldives movies, Afghan movies, Iranian movies, Iraqi movies, Syrian movies, Lebanese movies, Jordanian movies, Palestinian movies, Israeli movies, Egyptian movies, Moroccan movies, Algerian movies, Tunisian movies, Libyan movies, Sudanese movies, Ethiopian movies, Kenyan movies, Nigerian movies, Ghanaian movies, South African movies, Zimbabwean movies, Zambian movies, Malawian movies, Mozambican movies, Angolan movies, Namibian movies, Botswana movies, Lesotho movies, Swaziland movies, Madagascar movies, Mauritius movies, Seychelles movies, Comoros movies, Mayotte movies, Reunion movies, Djibouti movies, Eritrea movies, Somalia movies, Somaliland movies, Uganda movies, Tanzania movies, Rwanda movies, Burundi movies, Democratic Republic of Congo movies, Republic of Congo movies, Central African Republic movies, Chad movies, Cameroon movies, Gabon movies, Equatorial Guinea movies, Sao Tome and Principe movies, Cape Verde movies, Guinea-Bissau movies, Guinea movies, Sierra Leone movies, Liberia movies, Ivory Coast movies, Burkina Faso movies, Mali movies, Niger movies, Senegal movies, Gambia movies, Mauritania movies, Western Sahara movies, download Morocco movies, download Algeria movies, download Tunisia movies, download Libya movies, download Egypt movies, download Sudan movies, download South Sudan movies, download Ethiopia movies, download Eritrea movies, download Djibouti movies, download Somalia movies, download Somaliland movies, download Kenya movies, download Uganda movies, download Tanzania movies, download Rwanda movies, download Burundi movies, download Democratic Republic of Congo movies, download Republic of Congo movies, download Central African Republic movies, download Chad movies, download Cameroon movies, download Gabon movies, download Equatorial Guinea movies, download Sao Tome and Principe movies, download Cape Verde movies, download Guinea-Bissau movies, download Guinea movies, download Sierra Leone movies, download Liberia movies, download Ivory Coast movies, download Burkina Faso movies, download Mali movies, download Niger movies, download Senegal movies, download Gambia movies, download Mauritania movies, download Western Sahara movies. Free HD movie downloads, 1080p movies download, 720p movies download, 480p movies download, movie download sites, download movies online, free HD movies, download movies HD quality, watch movies online free, stream movies free, download latest movies, new movies download.</p>
+                <p>
+  Watch and download the latest HD movies including Bollywood hits, Hollywood blockbusters, and trending Hindi films. Explore genres like action, comedy, horror, and romance, all in high-quality streaming or download formats in 720p, 1080p, 480p movies. 
+</p>
         </div>
-        
-        <div className="footer-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/search">Search Movies</Link></li>
-            <li><Link href="/genre">Movie Genres</Link></li>
-            <li><Link href="/my-lists">My Lists</Link></li>
-          </ul>
-        </div>
-        
-        <div className="footer-section">
-          <h4>Categories</h4>
-          <ul>
-            <li><Link href="/?category=Popular">Popular Movies</Link></li>
-            <li><Link href="/?category=Top%20Rated">Top Rated</Link></li>
-            <li><Link href="/?category=Upcoming">Upcoming</Link></li>
-            <li><Link href="/?category=Now%20Playing">Now Playing</Link></li>
-          </ul>
-        </div>
+    
       </div>
       
       <SocialLinks />
@@ -63,6 +46,7 @@ const Footer = () => {
         }
         
         .footer-section h3 {
+            text-align: center;
           margin-bottom: 15px;
           font-size: 20px;
           font-weight: 600;

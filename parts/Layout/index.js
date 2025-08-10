@@ -38,7 +38,7 @@ const Layout = ({ theme, children }) => {
           <MainWrapper theme={theme}>
             <AppHeader />
             <ContentWrapper theme={theme}>{children}</ContentWrapper>
-            <Footer />
+            {/* <Footer /> */}
           </MainWrapper>
         </Media>
         <Media greaterThan="sm">
@@ -64,9 +64,10 @@ const Layout = ({ theme, children }) => {
               }
             `}</style>
             <ContentWrapper theme={theme}>{children}</ContentWrapper>
-            <Footer />
+          
           </MainWrapper>
         </Media>
+          <Footer />
       </MediaContextProvider>
     </>
   );
