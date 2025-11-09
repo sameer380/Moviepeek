@@ -10,17 +10,19 @@ export async function getServerSideProps({ req, res }) {
   const baseUrl = `https://${host}`;
 
   try {
-    // Fetch multiple movie categories for comprehensive coverage
-    const [
-      popularMovies,
-      topRatedMovies,
-      upcomingMovies,
-      nowPlayingMovies,
-      latestMovies,
-    ] = await Promise.all([
-      fetch(
-        `${TMDB_API_BASE_URL}/${TMDB_API_VERSION}/movie/popular?api_key=${TMDB_API_KEY}&page=1`,
-      ).then((r) => r.json()),
+    // Fetch multiple pages of popular movies for better coverage (Indian audience loves popular content)
+    const moviePages = [];
+    for (let page = 1; page <= 10; page++) {
+      moviePages.push(
+        fetch(
+          `${TMDB_API_BASE_URL}/${TMDB_API_VERSION}/movie/popular?api_key=${TMDB_API_KEY}&page=${page}`,
+        ).then((r) => r.json())
+      );
+    }
+
+    // Fetch other categories
+    const allResponses = await Promise.all([
+      ...moviePages,
       fetch(
         `${TMDB_API_BASE_URL}/${TMDB_API_VERSION}/movie/top_rated?api_key=${TMDB_API_KEY}&page=1`,
       ).then((r) => r.json()),
@@ -34,6 +36,13 @@ export async function getServerSideProps({ req, res }) {
         `${TMDB_API_BASE_URL}/${TMDB_API_VERSION}/movie/latest?api_key=${TMDB_API_KEY}`,
       ).then((r) => r.json()),
     ]);
+    
+    // Separate popular movies pages from other categories
+    const popularMoviesPages = allResponses.slice(0, 10);
+    const topRatedMovies = allResponses[10];
+    const upcomingMovies = allResponses[11];
+    const nowPlayingMovies = allResponses[12];
+    const latestMovies = allResponses[13];
 
     // Fetch genres
     const genresResponse = await fetch(
@@ -41,37 +50,47 @@ export async function getServerSideProps({ req, res }) {
     );
     const genres = await genresResponse.json();
 
-    // Combine all movies, remove duplicates, and prioritize by popularity
-    const allMovies = [
-      ...(popularMovies.results || []),
-      ...(topRatedMovies.results || []),
-      ...(upcomingMovies.results || []),
-      ...(nowPlayingMovies.results || []),
-    ];
+    // Combine all movies from multiple pages
+    const allMovies = [];
+    popularMoviesPages.forEach((pageData) => {
+      if (pageData.results) {
+        allMovies.push(...pageData.results);
+      }
+    });
+    
+    // Add other categories
+    if (topRatedMovies.results) allMovies.push(...topRatedMovies.results);
+    if (upcomingMovies.results) allMovies.push(...upcomingMovies.results);
+    if (nowPlayingMovies.results) allMovies.push(...nowPlayingMovies.results);
+    if (latestMovies.id) allMovies.push(latestMovies);
 
-    // Add latest movie if it exists
-    if (latestMovies.id) {
-      allMovies.push(latestMovies);
-    }
-
+    // Remove duplicates and prioritize by popularity
     const uniqueMovies = allMovies.filter(
       (movie, index, self) =>
         index === self.findIndex((m) => m.id === movie.id),
     );
 
-    // Sort by popularity (vote_average and vote_count)
+    // Sort by popularity score (vote_average * vote_count * popularity)
     const sortedMovies = uniqueMovies.sort((a, b) => {
-      const scoreA = a.vote_average * a.vote_count || 0;
-      const scoreB = b.vote_average * b.vote_count || 0;
+      const scoreA = (a.vote_average || 0) * (a.vote_count || 0) * (a.popularity || 1);
+      const scoreB = (b.vote_average || 0) * (b.vote_count || 0) * (b.popularity || 1);
       return scoreB - scoreA;
     });
 
-    // Take top 1000 movies for sitemap (Vercel-friendly)
-    const topMovies = sortedMovies.slice(0, 1000);
+    // Take top 2000 movies for sitemap (better coverage for Indian audience)
+    const topMovies = sortedMovies.slice(0, 2000);
+
+    // Calculate priority based on popularity for better SEO
+    const calculatePriority = (movie, index) => {
+      if (index < 100) return '1.0';
+      if (index < 500) return '0.9';
+      if (index < 1000) return '0.8';
+      return '0.7';
+    };
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Static Pages -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Static Pages with High Priority -->
   <url>
     <loc>${baseUrl}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
@@ -84,16 +103,8 @@ export async function getServerSideProps({ req, res }) {
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
-  <url>
-    <loc>${baseUrl}/my-lists</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
 
-  <!-- Category Pages removed to avoid advertising parameterized home URLs -->
-
-  <!-- Genre Pages -->
+  <!-- Genre Pages - Important for Indian Audience -->
   ${genres.genres
     ?.map(
       (genre) => `
@@ -101,42 +112,52 @@ export async function getServerSideProps({ req, res }) {
     <loc>${baseUrl}/genre?id=${genre.id}&amp;name=${encodeURIComponent(genre.name)}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>`,
     )
     .join('')}
 
-  <!-- Movie Pages with Enhanced SEO URLs -->
+  <!-- Movie Pages with Enhanced SEO URLs and Images -->
   ${topMovies
-    .map((movie) => {
+    .map((movie, index) => {
       const movieYear = movie.release_date
         ? new Date(movie.release_date).getFullYear()
-        : '2024';
+        : '2025';
       
-      // Generate multiple URL variations for better SEO
-      const urlVariations = generateMovieUrls(movie.title, movieYear, movie.id);
+      const movieSlug = generateMovieUrls(movie.title, movieYear, movie.id)[0];
+      const priority = calculatePriority(movie, index);
+      const lastmod = movie.release_date || new Date().toISOString();
+      
+      // Add image sitemap data for better CTR
+      const posterPath = movie.poster_path 
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : null;
+      
+      const imageTag = posterPath 
+        ? `
+    <image:image>
+      <image:loc>${posterPath}</image:loc>
+      <image:title>${movie.title.replace(/&/g, '&amp;')}</image:title>
+      <image:caption>${(movie.overview || movie.title).substring(0, 100).replace(/&/g, '&amp;')}</image:caption>
+    </image:image>`
+        : '';
 
-      return urlVariations
-        .map(
-          (url) => `
+      return `
   <url>
-    <loc>${baseUrl}${url}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>`,
-        )
-        .join('');
+    <loc>${baseUrl}${movieSlug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>${priority}</priority>${imageTag}
+  </url>`;
     })
     .join('')}
 
-  <!-- Paginated Movie Sitemaps for SEO Movies -->
-  ${Array.from({ length: 5 }, (_, i) => `
+  <!-- Paginated Movie Sitemaps for Better Indexing -->
+  ${Array.from({ length: 10 }, (_, i) => `
   <sitemap>
     <loc>${baseUrl}/sitemap-movies-${i + 1}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
   </sitemap>`).join('')}
-
 
 </urlset>`;
 

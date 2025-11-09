@@ -8,8 +8,11 @@ export async function getServerSideProps({ req, res }) {
   const robotsTxt = `User-agent: *
 Allow: /
 
-# Sitemaps
+# Sitemaps - Enhanced for Indian audience
 Sitemap: ${baseUrl}/sitemap.xml
+Sitemap: ${baseUrl}/sitemap-movies-1.xml
+Sitemap: ${baseUrl}/sitemap-movies-2.xml
+Sitemap: ${baseUrl}/sitemap-movies-3.xml
 
 # Disallow admin and private areas
 Disallow: /admin/
@@ -18,7 +21,7 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /static/
 
-# Allow important pages
+# Allow important pages - Optimized for movie streaming site
 Allow: /movie/
 Allow: /genre/
 Allow: /search/
@@ -27,11 +30,6 @@ Allow: /list/
 Allow: /watch-*
 Allow: /download-*
 Allow: /stream-*
-Allow: /free-*
-Allow: /hd-*
-Allow: /latest-*
-Allow: /new-*
-Allow: /movie-trailers
 
 # Specific movie and trailer pages
 Allow: /watch-*-*
@@ -39,8 +37,8 @@ Allow: /download-*-*
 Allow: /stream-*-*
 Allow: /genre?*
 
-# Crawl delay for better server performance
-Crawl-delay: 1
+# Crawl delay for better server performance (reduced for faster indexing)
+Crawl-delay: 0.5
 
 # Additional directives for better SEO
 User-agent: Googlebot

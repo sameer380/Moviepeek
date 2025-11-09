@@ -30,6 +30,7 @@ const MovieListItem = ({ theme, movie, baseUrl, fetchpriority }) => {
           width={W342H513.WIDTH}
           height={W342H513.HEIGHT}
           fetchpriority={fetchpriority}
+          alt={`Poster for ${movie.title}`}
           src={`${baseUrl}w${W342H513.WIDTH}${movie.poster_path}`}
         />
         <DetailsPanelWrapper theme={theme}>

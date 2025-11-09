@@ -6,19 +6,20 @@ import { useStore } from 'store';
 import ThemeProvider from 'utils/hocs/ThemeProvider';
 import Layout from 'parts/Layout';
 import { AuthProvider } from 'utils/hocs/AuthProvider';
-import { APP_NAME, APP_DESCRIPTION, APP_KEYWORDS } from 'utils/constants';
 
 const MyApp = ({ Component, pageProps }) => {
   const store = useStore(pageProps.initialReduxState);
 
+  const siteTitle = 'WatchMovieHub';
+  const siteDescription = 'Your source for movie reviews, trailers, and news.';
+
   return (
     <>
       <Head>
-        <title>{APP_NAME}</title>
-        <meta name="description" content={APP_DESCRIPTION} />
-        <meta name="keywords" content={APP_KEYWORDS} />
-        <meta property="og:title" content={APP_NAME} />
-        <meta property="og:description" content={APP_DESCRIPTION} />
+        <title>{siteTitle}</title>
+        <meta name="description" content={siteDescription} />
+        <meta property="og:title" content={siteTitle} />
+        <meta property="og:description" content={siteDescription} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

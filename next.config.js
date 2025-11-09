@@ -42,6 +42,14 @@ module.exports = withBundleAnalyzer(
               key: 'X-DNS-Prefetch-Control',
               value: 'on',
             },
+            {
+              key: 'X-Robots-Tag',
+              value: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+            },
+            {
+              key: 'Cache-Control',
+              value: 'public, max-age=3600, stale-while-revalidate=59',
+            },
           ],
         },
         {
@@ -59,51 +67,12 @@ module.exports = withBundleAnalyzer(
     // Redirects for SEO-friendly URLs
     async redirects() {
       return [
-        // Strip default homepage query parameters to keep canonical /
-        {
-          source: '/',
-          has: [
-            { type: 'query', key: 'category', value: 'Popular' },
-            { type: 'query', key: 'page', value: '1' },
-          ],
-          destination: '/',
-          permanent: true,
-        },
-        // Also strip just page=1 on homepage
-        {
-          source: '/',
-          has: [{ type: 'query', key: 'page', value: '1' }],
-          destination: '/',
-          permanent: true,
-        },
-        // Redirect old movie URLs to new SEO-friendly URLs
         {
           source: '/movie',
           has: [{ type: 'query', key: 'id' }],
           destination: '/movie/:id',
           permanent: true,
-        },
-        // Redirect alternative movie URLs to main movie page
-        {
-          source: '/watch-:slug',
-          destination: '/movie/:slug',
-          permanent: true,
-        },
-        {
-          source: '/download-:slug',
-          destination: '/movie/:slug',
-          permanent: true,
-        },
-        {
-          source: '/stream-:slug',
-          destination: '/movie/:slug',
-          permanent: true,
-        },
-        {
-          source: '/genre',
-          destination: '/',
-          permanent: true,
-        },
+        }
       ];
     },
 
