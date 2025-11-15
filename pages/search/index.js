@@ -13,7 +13,6 @@ import Loader from 'components/UI/Loader';
 import getSearchMovies from 'actions/getSearchMovies';
 import clearMovies from 'actions/clearMovies';
 import QUERY_PARAMS from 'utils/constants/query-params';
-import LINKS from 'utils/constants/links';
 import checkEmptyObject from 'utils/helpers/checkEmptyObject';
 
 const Search = () => {

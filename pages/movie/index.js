@@ -13,7 +13,6 @@ import getRecommendedMovies from 'actions/getRecommendedMovies';
 import clearRecommendedMovies from 'actions/clearRecommendedMovies';
 import clearMovie from 'actions/clearMovie';
 import QUERY_PARAMS from 'utils/constants/query-params';
-import LINKS from 'utils/constants/links';
 import checkEmptyObject from 'utils/helpers/checkEmptyObject';
 
 const Movie = () => {

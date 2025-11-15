@@ -15,7 +15,6 @@ import getGenreMovies from 'actions/getGenreMovies';
 import clearMovies from 'actions/clearMovies';
 import { SORT_BY_OPTIONS } from 'utils/constants/select-search';
 import QUERY_PARAMS from 'utils/constants/query-params';
-import LINKS from 'utils/constants/links';
 import checkEmptyObject from 'utils/helpers/checkEmptyObject';
 
 const Genre = () => {

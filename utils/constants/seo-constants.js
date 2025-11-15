@@ -30,3 +30,6 @@ export const SEO_TEMPLATES = {
     description: 'Explore the best of Indian cinema, including Bollywood, Tamil, Telugu, and other regional movies.',
   },
 };
+
+// Static fallback keywords used across pages when movie-specific keywords are not available
+export const STATIC_KEYWORDS = 'movies, watch movies online, download movies, HD movies, latest movies, watch online';

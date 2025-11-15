@@ -20,13 +20,9 @@ import { APP_NAME } from 'utils/constants';
 const MoviePage = ({ movie, movieId }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  
-  if (router.isFallback) {
-    return <Loader />;
-  }
-
   const general = useSelector((state) => state.general);
   const recommendedMovies = useSelector((state) => state.recommendedMovies);
+
   const page = 1; // Default to page 1 for recommended movies
 
   useEffect(() => {
@@ -91,6 +87,10 @@ const MoviePage = ({ movie, movieId }) => {
     director: movie.credits?.crew?.find((c) => c.job === 'Director')?.name,
     actor: movie.credits?.cast?.slice(0, 10).map((actor) => actor.name),
   };
+
+  if (router.isFallback) {
+    return <Loader />;
+  }
 
   return (
     <PageWrapper>
